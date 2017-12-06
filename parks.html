@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>Loudoun Area Parks</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Bad+Script" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+  <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5FnoMDUEmr0pqGC3ZpIRvffD4uKzFGQ0"></script>
+  <script type="text/javascript" src="Registration.js"></script>
+  
+  <style>
+   
+   #sitelogo{
+      margin-top: 11px;
+      height: 42px;
+      width: 37px;
+    } 
+   #myNavbar {
+    font-family: 'Bad Script', cursive;
+    font-size: 18px;
+    
+    } 
+
+    h4{
+      
+      text-align: center;
+
+    }
+
+    body {
+      background-color: #fac5f6;
+    }
+    .jumbotron {
+        font-family: verdana;
+        background-image: url(assets/images/background.png);
+      }
+    
+    .panel-title{
+
+      color: white;
+
+    }
+    #SignInLi{
+      position: relative;
+      left: -10px;
+    }
+
+  </style>
+
+</head>
+
+<body onload = "checkCookie()">
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <img id="sitelogo" src="assets/images/sitelogo.jpg" alt="">
+
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="index.html">Home</a></li>
+        <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Resources
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="members.html">View Members</a></li>
+          <li><a href="meetup.html">Meet Ups</a></li>
+          <li><a href="parks.html">Top Rated Parks</a></li>
+        </ul>
+      </li>
+        
+      </ul>
+      <ul id = "SignInUl" class="nav navbar-nav navbar-right">
+        <li id = "SignInLi"><a  onclick = "clearToolTip()" data-toggle="modal" data-target="#modalSignIn"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <div class="container">
+    <br>
+    <!-- Jumbotron -->
+    <div class="jumbotron">
+      <h1 class="text-center">Loudoun Area Parks</h1>
+      <h2>Rated Best by Mom's Connect</h2>
+      <h3 id="TimeAlert"></h3>
+    </div>
+    <div class="row">
+       <!-- park Register Record Panel-->
+        <div class="col-lg-12">
+
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading" style="background-color: #983da0">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse1"><span class="glyphicon glyphicon-tree-conifer">
+                </span>Add a Park</a></a>
+              </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+              <div class="panel-body">
+              <div class="row>"> 
+              <!-- Sign-up Form (note the various input "types")-->
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="name-input">Name:</label>
+                      <input class="form-control" id="name-input" type="text" placeholder="Ashburn Park">
+                    </div>
+                    <div class="form-group">
+                      <label for="address-input">Address:</label>
+                      <input class="form-control" id="address-input" type="text" placeholder="43546 Partlow Road Asbburn, VA 20147">
+                    </div>
+                    <div class="form-group">
+                      <label for="phone-input">Phone:</label>
+                      <input class="form-control" id="phone-input" type="text" placeholder="(703) 445-4432">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="hours-input">Hours:</label>
+                      <input class="form-control" id="hours-input" type="text" placeholder="Mon - Fri 9 a.m. to 5 p.m."></input>
+                    </div>
+                    <div class="form-group">
+                      <label for="imgloc-input">Photo:</label>
+                      <input class="form-control" id="imgloc-input" type="text" placeholder="assets/images/parks/ashburnpark.jpg">
+                    </div>
+                    <button class="btn btn-primary" id="add-park" type="submit">Submit</button>
+                  </div>
+                </div>
+            </div>
+              <div class="panel-footer" style="background-color: #983da0"></div>
+            </div>
+          </div>
+        </div>
+   
+    <div class="row">
+      <!-- Train Schedule Listing-->
+      <div class="col-lg-12">
+            <div class="panel panel-default">
+              <div class="panel-heading" style="background-color: #c971d1">
+                <h3 class="panel-title">Best Park Locations</h3>
+              </div>
+            <div class="panel-body">
+            <table class="table table-hover" id='park-table'>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Hours</th>
+                    <th>Map it</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+      </div>
+    </div>      
+    
+
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content" style='align-items: center;'>
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Map to the park</h4>
+          <p id="ParkAddr"></p>
+        </div>
+        <div class="modal-body">
+          <div class="mapCanvas" id="mapCanvas" style="width: 575px; height: 400px;"></div> 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+  <!-- <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script> -->
+
+  <!-- Script -->
+  <script>
+   $(document).ready(function(){
+    var map;
+    // Initialize Firebase
+    var config = {
+    apiKey: "AIzaSyDrLO-RSZ-B6BD4gxJXqCOnMLA19DFHcsI",
+    authDomain: "momsconnection-63998.firebaseapp.com",
+    databaseURL: "https://momsconnection-63998.firebaseio.com",
+    projectId: "momsconnection-63998",
+    storageBucket: "momsconnection-63998.appspot.com",
+    messagingSenderId: "102438011730"
+    };
+
+    firebase.initializeApp(config);
+
+    // Create a variable to reference the database
+    var database = firebase.database();
+    // Capture Button Click
+    $("#add-park").on("click", function() {
+      // Don't refresh the page!
+      event.preventDefault();
+    
+      var startdate = new Date();
+      var name = $("#name-input").val().trim();
+      //var name = "Ashburn Park";
+      var address = $("#address-input").val().trim();
+      //var address = "43546 Partlow Road Asbburn, VA 20147";
+      var phone = $("#phone-input").val().trim();
+      //var phone = "(703) 444-6655";
+      var hours = $("#hours-input").val().trim();
+      //var hours = "Mon - Fri 9 a.m. to 5 p.m.";
+      var imgloc = $("#imgloc-input").val().trim();
+      //var imgloc = "assets/images/parks/ashburnpark.jpg";
+      //Push or save new record
+      var parkId = $("#name-input").val().trim().replace( /\s/g, "");
+      //var parkId = "AshburnPark";
+
+
+
+      database.ref('parks/' + parkId).set({
+        name: name,
+        address: address,
+        phone: phone,
+        hours: hours,
+        imgloc: imgloc
+      });
+
+      // alert that the new record was suucessfully added
+      //alert("New Park Record Added to Firebase");
+
+      // Clears all values after entr is made
+      $("#name-input").val("");
+      $("#address-input").val("");
+      $("#phone-input").val("");
+      $("#hours-input").val("");
+      $("#imgloc-input").val("");
+
+      
+      return false;
+
+    });
+
+    // Firebase watcher + initial loader HINT: .on("value")
+    database.ref('parks/').on("child_added", function(childSnapshot, prevChildKey) {
+      //put object values into local variables
+      var parkName = childSnapshot.val().name;
+      var parkAddress = childSnapshot.val().address;
+      var parkPhone = childSnapshot.val().phone;
+      var parkHours = childSnapshot.val().hours;
+      var parkImgLoc = childSnapshot.val().imgloc;
+
+      
+
+    // Add each park's data into the table
+      $("#park-table > tbody").append("<tr><td><img id='openmodal' src="+ parkImgLoc + "></img></td><td>" + parkName + "</td><td>" + parkAddress + "</td><td>" +
+        parkPhone + "</td><td>" + parkHours + "</td><td>" +
+        "<button type='button' class='btn btn-default btn-sm' id='openmodal' data-toggle='modal' data-target='#myModal' data-value='" + parkAddress + "'><span class='glyphicon glyphicon-map-marker'></span> Map Park</button>" + "</td><tr>");
+
+      
+    });
+
+    //Put current time in jumbo
+    var nowTime = moment();
+    $('#TimeAlert').html("CURRENT TIME: " + moment(nowTime).format("hh:mm"));
+    
+    
+    //modal with address and map
+    $(document).on('click', '#openmodal',function(){
+      var addrPark = $(this).attr('data-value');
+      console.log(addrPark);
+      $('#ParkAddr').html(addrPark);
+      //map code here
+      var mapOptions = {
+      center: new google.maps.LatLng(39.030643, -77.469985),
+      zoom: 12,
+      mapTypeId: 'hybrid'
+      };
+      //removed var here
+      map = new google.maps.Map(document.getElementById("mapCanvas"),
+      mapOptions);
+      console.log(map);
+      var marker = new google.maps.Marker({
+      position: new google.maps.LatLng(39.030643, -77.469985)
+
+
+
+      });
+        marker.setMap(map); 
+
+    var geocoder = new google.maps.Geocoder();
+
+      geocoder.geocode({
+      'address': addrPark
+      }, 
+      function(results, status) {
+        if(status == google.maps.GeocoderStatus.OK) {
+          var parkMarker = new google.maps.Marker({
+            position: results[0].geometry.location,
+            map: map
+           });
+          map.setCenter(results[0].geometry.location);
+          parkMarker.setMap(map);
+         
+        }
+      });
+
+    });
+    //call resize to ensure map will show
+$('#myModal').on('shown.bs.modal', function() {
+  console.log($(this));
+  var currentCenter = map.getCenter();  // Get current center before resizing
+  console.log("in modal resize");
+  google.maps.event.trigger(map, "resize");
+  map.setCenter(currentCenter); // Re-set previous center
+
+});
+});
+
+  </script>
+  
+</body>
+
+</html>

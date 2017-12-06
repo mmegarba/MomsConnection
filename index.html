@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>New Mom's Connect</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Bad+Script" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js"></script>
+  <script type="text/javascript" src="Registration.js"></script>
+  <script src="assets/javascript/js-cookie.js"></script>
+  <script src="assets/javascript/tether.min.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+  <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+  <script src="assets/javascript/validator.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+      
+    }
+
+    #sitelogo{
+      margin-top: 11px;
+      height: 42px;
+      width: 37px;
+    }
+
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 18px;
+      background-color: #ffe6ff;
+      height: 180%;
+      font-family: verdana;
+      letter-spacing: 2px;
+
+    }
+
+    h6 {
+      font-size: 14px;
+    }
+
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #fac5f6;
+      color: white;
+      position: fixed;
+      bottom: 0px;
+      width: 100%;
+      height: 70px;
+      
+    }
+
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      
+      .row.content {
+        height:auto;
+        width: auto;
+      }
+      
+    img{
+        height: auto;
+        width: auto;
+
+      }
+    }
+
+    li {
+      margin-top: 10px;
+    }
+
+    p {
+      font-family: verdana;
+      font-size: 12px;
+
+    }
+
+
+    #myNavbar {
+    font-family: 'Bad Script', cursive;
+    font-size: 18px;
+    
+    } 
+
+    #momsConnectPic {
+    width: 780px;
+    height: 150px;
+      
+    }
+
+    li {
+    color: white;
+    }
+
+    #SignInLi{
+      position: relative;
+      left: -10px;
+    }
+
+   
+    
+    
+
+    .et_pb_fullwidth_header_subhead {
+      text-align: center;
+      font-family: 'Bad Script', cursive;
+      display: block;
+      text-transform: uppercase !important;
+      letter-spacing: 5px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    #info {
+      text-align: center;
+      font-family: verdana;
+      font-size: 14px;
+      margin-bottom: 15px;
+      background: transparent;
+
+    }
+
+    #info_email {
+    color: black;
+
+  }
+
+   .glyphicon.glyphicon-envelope {
+    color: black;
+  }
+
+</style>
+
+</head>
+<body onload = "checkCookie()">
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <img id="sitelogo" src="assets/images/sitelogo.jpg" alt="">
+
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Resources
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="members.html">View Members</a></li>
+          <li><a href="meetup.html">Meet Ups</a></li>
+          <li><a href="parks.html">Top Rated Parks</a></li>
+        </ul>
+      </li>
+        <li><a data-toggle="modal" data-target="#modalRegister">Register</a></li>
+      </ul>
+      <ul id = "SignInUl" class="nav navbar-nav navbar-right">
+        <li id = "SignInLi"><a  onclick = "clearToolTip()" data-toggle="modal" data-target="#modalSignIn"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid text-center">
+  <div class="row content">
+    <div class="col-sm-2 sidenav">
+
+      <H6><b>About Us:</b></H6>
+      <p>Mom’s Connect is a place where moms with kids below 5 years old can come and learn, share and connect with other moms.  We are located in Ashburn, VA.  We can’t wait to meet you! 
+      </p>
+      <!--This is where the local weather feature will be placed -->
+    </div>
+
+    <div class="col-sm-8 text-left">
+    <br>
+    <img src="assets/images/momsconnect.jpg" id="momsConnectPic">
+    <span class="et_pb_fullwidth_header_subhead">Mom's Connect | Events | Join Us | Contact Us </span>
+    <div id="info">
+      <span class="glyphicon glyphicon-earphone"></span>
+        <span id="info_phone">703.456.7634</span>
+            <a href="mailto:momsconnectashburn@gmail.com">
+          <span class="glyphicon glyphicon-envelope"></span> 
+        <span id="info_email">Momsconnect@gmail.com</span>
+      </a>
+        <a href="https://www.facebook.com/groups/momsconnectgroup/">
+          <i class="fa fa-facebook-official" style="font-size:19px"></i>
+        </a>
+        <a href="https://twitter.com/CityMommyDC">
+          <i class="fa fa-twitter-square" style="font-size:19px"></i>
+        </a>
+    </div>
+
+      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+          </ol>
+
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner">
+            <div class="item active">
+              <img src="assets/images/Scroll_image1.jpg" alt="image 1">
+            </div>
+
+            <div class="item">
+              <img src="assets/images/Scroll_Image2.jpg" alt="image 2">
+            </div>
+
+            <div class="item">
+              <img src="assets/images/Scroll_Image3.jpg" alt="image 3">
+            </div>
+          </div>
+
+          <!-- Left and right controls -->
+          <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+            </div>
+    <div class="col-sm-2 sidenav">
+
+    </div>
+  </div>
+</div>
+
+<footer class="container-fluid text-center">
+  <p>Copyright Mom's Connect 2017</p>
+</footer>
+ <!-- Modal -->
+  <div class="modal fade" id="modalSignIn" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style="padding:35px 50px;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4><span class="glyphicon glyphicon-lock"></span> Login</h4>
+        </div>
+        <div class="modal-body" style="padding:40px 50px;">
+          <form role="form" data-toggle= "validator">
+            <div class="form-group">
+              <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
+              <input title = "The email you’ve entered doesn’t match any account, try again or register." data-trigger = "manual" data-toggle= "tooltip" data-placement ="right" type="email" class="form-control" id="usrname" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+              <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
+              <input title = "Incorrect Password, try again." data-trigger = "manual" data-toggle= "tooltip" data-placement ="left" type="password" class="form-control" id="psw" placeholder="Enter password">
+            </div>
+              <button onclick="checkSignIn()" type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- Modal - Registration -->
+<div class="modal fade" id="modalRegister" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Regristration Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    First Time Registration
+                </h4>
+            </div>
+
+            <!-- Modal Registration Body -->
+            <div class="modal-body">
+                <div id="saveSuccess"></div>
+                <form id="regForm" class="form-horizontal" method="post" role="form" data-toggle="validator">
+
+                  <div class="form-group">
+                    <label  class="col-sm-2 control-label" for="name-input">Name</label>
+                    <div class="col-sm-10"><input id="name-input" type="text" class="form-control" placeholder="Full Name" name="name" required/>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                  </div>
+                  <div class="form-group">
+                    <label  class="col-sm-2 control-label" for="email-input">Email</label>
+                    <div class="col-sm-10"><input id="email-input" type="email" class="form-control"
+                        placeholder="Email" name="email" required/>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                  </div>
+                  <div class="form-group">
+                    <label  class="col-sm-2 control-label" for="address1-input">Address 1</label>
+                    <div class="col-sm-10"><input type="text" class="form-control"
+                        id="address1-input" placeholder="Address1" name="address1" required/>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                  </div>
+                  <div class="form-group">
+                    <label  class="col-sm-2 control-label" for="address2-input">Address 2</label>
+                    <div class="col-sm-10"><input type="text" class="form-control"
+                        id="address2-input" placeholder="Address2" name="address2"/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label  class="col-sm-2 control-label" for="city-input">City</label>
+                    <div class="col-sm-10"><input type="text" class="form-control"
+                        id="city-input" placeholder="City" name="city" required/>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                  </div>
+                  <div class="form-group">
+                    <label  class="col-sm-2 control-label" for="state-input">State</label>
+                    <div class="col-sm-10"><input type="text" class="form-control"
+                        id="state-input" placeholder="State" name="state" required/>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                  </div>
+                  <div class="form-group">
+                    <label  class="col-sm-2 control-label" for="zipcode-input">Zip</label>
+                    <div class="col-sm-10"><input type="text" class="form-control"
+                        id="zipcode-input" placeholder="Zip" name="zip" required/>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                  </div>
+                  <div class="form-group">
+                    <label  class="col-sm-2 control-label" for="phone-input">Phone</label>
+                    <div class="col-sm-10"><input type="text" class="form-control"
+                        id="phone-input" placeholder="Phone" name="phone" required/>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                  </div>
+                  <div class="form-group">
+                    <label  class="col-sm-2 control-label" for="childage-input">Child's Age</label>
+                    <div class="col-sm-10"><input type="text" class="form-control"
+                        id="childage-input" placeholder="0" name="childage" required/>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <div class="radio-inline">
+                        <label><input id="chkGirl" type="radio" name="optradio" value="Girl"> Girl</label>
+                      </div>
+                      <div class="radio-inline">
+                        <label><input  id="chkBoy" type="radio" name="optradio" value="Boy"> Boy</label>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                          for="password-input" >Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control"
+                            id="password-input" placeholder="Password" name="password" required/>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <div class="checkbox">
+                        <label><input id="chkRemember" type="checkbox"/>Remember me next time</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button type="submit" class="btn btn-default">Register</button>
+                    </div>
+                  </div>
+                </form>
+            </div>
+            <!-- Modal Regriations Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
+                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Welcome back message Modal -->
+<div id = "WelcomeBackModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class = "welcomeBack" class="modal-title"> Welcome Back</h4>
+      </div>
+      <div class="modal-body">
+        <p class = "welcomeBack" id = "WelcomeBackUser"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+
+
+$(document).ready(function() {
+
+    $('#regForm').validator().on('submit', function (e) {
+      if (e.isDefaultPrevented()) {
+        // handle the invalid form...
+      } else {
+        // everything looks good!
+        fnRegisterMom();
+      }
+    })
+});
+
+</script>
+
+
+
+</body>
+</html>
